@@ -11,6 +11,8 @@ class App extends Component {
    this.state = {
      timeRemaining: 1500000,
      length: 1500000,
+     isComplete: false,
+     isRunning: false,
 
      };
     this.increment = this.increment.bind(this);
@@ -37,12 +39,28 @@ class App extends Component {
 
   countDown() {
     if(this.state.timeRemaining > 0){
+      const isRunning = true;
+      this.setState ({isRunning});
       console.log('here in countDown');
       const timeRemaining = this.state.timeRemaining - 1000;
       console.log('timeRemaining', timeRemaining);
       this.setState ({timeRemaining});
     };
+    if(this.state.timeRemaining === 0){
+      const isComplete = true
+      this.playSound();
+      this.setState ({isComplete});
+
+    }
   }
+
+  playSound(){
+    const sound = document.createElement('audio');
+    sound.src= "https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3";
+    sound.currentTime = 0
+    sound.play();
+  }
+
   reset() {
     console.log('here in reset');
     clearInterval(this.interval);
@@ -56,8 +74,10 @@ class App extends Component {
       <h1> Pomodoro Clock </h1>
       <Display
       timeRemaining= { this.state.timeRemaining }
+      isRunning= { this.state.isRunning }
       countDown= { this.countDown }
       reset= {this.reset}
+
       />
       <br/>
       <ControlTimer

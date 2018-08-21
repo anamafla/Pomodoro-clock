@@ -24,7 +24,6 @@ class Display extends Component {
 
  startClock() {
    console.log('props.timeRemaining',this.state.timeRemaining);
-   console.log('here in startClock');
    this.interval = setInterval(this.props.countDown,1000);
   }
 
@@ -34,27 +33,28 @@ class Display extends Component {
   }
 
 
-
   render() {
-        console.log('Here in render of Display');
-        console.log(this.state.timeRemaining);
 
+        const minutes =  Math.floor(this.props.timeRemaining/60000)
+        const remainderSeconds =Math.floor((this.props.timeRemaining%60000)/1000)
     return (
 
       <div>
         <StyledContainer>
         <StyledDisplay>
-         <span>{Math.floor(this.props.timeRemaining/60000)}</span>
+         <span>{minutes}</span>
          <span>  : </span>
-         <span>{Math.floor((this.props.timeRemaining%60000)/1000)}</span>
+         <span>{remainderSeconds< 10? '0':''}{remainderSeconds}</span>
          <br/>
-         <StyledButton onClick={this.startClock} variant="fab" mini color="primary" >
-           <PlayArrow/>
-         </StyledButton>
-         <span>  </span>
-         <StyledButton onClick={this.stopClock} variant="fab" mini color="primary">
+         {this.props.isRunning ?
+         (<StyledButton onClick={this.stopClock} variant="fab" mini color="primary">
            <Pause/>
-         </StyledButton>
+         </StyledButton>):
+         (<StyledButton onClick={this.startClock} variant="fab" mini color="primary" >
+           <PlayArrow/>
+         </StyledButton>)
+       }
+          <span>  </span>
          <StyledButton onClick={this.props.reset} variant="fab" mini  color="primary">
            <Replay/>
          </StyledButton>
