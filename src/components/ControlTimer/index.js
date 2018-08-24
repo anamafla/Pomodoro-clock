@@ -11,10 +11,16 @@ class ControlTimer extends Component {
    return (
     <div>
       <StyledContainer>
-      <label>Session Length:  </label>
-      <span> {Math.floor(this.props.length/60000)} </span>
+      <label>
+        <span>{this.props.name === "controlSession"? "Session " : "Break "}</span>
+        <span>Length</span>
+      </label>
+
+      <span>
+        { Math.floor(this.props.length/60000)}
+      </span>
       <div>
-      <Button onClick= {this.props.handleIncrement} mini color="primary" >
+      <Button onClick= { this.props.handleIncrement} mini color="primary" >
        <AddIcon/>
       </Button>
       <Button onClick={this.props.handleDecrement} mini color="primary" >

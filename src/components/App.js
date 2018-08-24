@@ -11,12 +11,15 @@ class App extends Component {
    this.state = {
      timeRemaining: 1500000,
      length: 1500000,
-     isComplete: false,
+     lengthBreak: 60000,
      isRunning: false,
+     type: "Session",
 
      };
     this.increment = this.increment.bind(this);
     this.decrement = this.decrement.bind(this);
+    this.startClock = this.startClock.bind(this);
+    this.stopClock = this.stopClock.bind(this);
     this.countDown = this.countDown.bind(this);
     this.reset = this.reset.bind(this);
    };
@@ -37,6 +40,20 @@ class App extends Component {
     }
   }
 
+  startClock() {
+     console.log('props.timeRemaining',this.state.timeRemaining);
+     if (this.state.timeRemaining > 0)
+       this.interval = setInterval(this.countDown,1000);
+    }
+
+  stopClock() {
+     console.log('here in stopClock');
+     clearInterval(this.interval);
+    }
+
+
+
+
   countDown() {
     if(this.state.timeRemaining > 0){
       const isRunning = true;
@@ -47,18 +64,29 @@ class App extends Component {
       this.setState ({timeRemaining});
     };
     if(this.state.timeRemaining === 0){
-      const isComplete = true
+      let type="";
+      if (this.state.type === "Session") {
+        type = "Break";
+        const timeRemaining = this.state.lengthBreak
+        this.setState ({timeRemaining});
+      } else {
+        type = "Session";
+        const timeRemaining = this.state.length
+        this.setState ({timeRemaining});
+      }
+      this.setState({type});
       this.playSound();
-      this.setState ({isComplete});
 
     }
   }
 
   playSound(){
+    console.log("Here in playSound");
     const sound = document.createElement('audio');
     sound.src= "https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3";
     sound.currentTime = 0
     sound.play();
+    sound.remove();
   }
 
   reset() {
@@ -67,26 +95,34 @@ class App extends Component {
     this.setState({ timeRemaining: this.state.length});
   }
 
-
  render() {
+   console.log("Here in render")
   return (
     <StyledAppContainer>
       <h1> Pomodoro Clock </h1>
       <Display
       timeRemaining= { this.state.timeRemaining }
       isRunning= { this.state.isRunning }
+      type= {this.state.type}
+      startClock= { this.startClock }
+      stopClock= { this.stopClock }
       countDown= { this.countDown }
       reset= {this.reset}
 
       />
       <br/>
       <ControlTimer
+      name= { "controlSession" }
       length= { this.state.length }
+      type= { this.state.type }
       handleIncrement= {this.increment}
       handleDecrement= {this.decrement}
+
       />
       <ControlTimer
-      length= { this.state.length }
+      name= { "controlBreak" }
+      length= { this.state.lengthBreak }
+      type= { this.state.type }
       handleIncrement= {this.increment}
       handleDecrement= {this.decrement}
       />

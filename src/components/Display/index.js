@@ -12,26 +12,7 @@ class Display extends Component {
   constructor(props) {
    super(props);
 
-
-   this.state = {
-     timeRemaining: props.timeRemaining,
-   }
-
-   this.startClock = this.startClock.bind(this);
-   this.stopClock = this.stopClock.bind(this);
-
 }
-
- startClock() {
-   console.log('props.timeRemaining',this.state.timeRemaining);
-   this.interval = setInterval(this.props.countDown,1000);
-  }
-
-  stopClock() {
-    console.log('here in stopClock');
-    clearInterval(this.interval);
-  }
-
 
   render() {
 
@@ -42,15 +23,16 @@ class Display extends Component {
       <div>
         <StyledContainer>
         <StyledDisplay>
+         <div>{this.props.type}</div>
          <span>{minutes}</span>
          <span>  : </span>
          <span>{remainderSeconds< 10? '0':''}{remainderSeconds}</span>
          <br/>
          {this.props.isRunning ?
-         (<StyledButton onClick={this.stopClock} variant="fab" mini color="primary">
+         (<StyledButton onClick={this.props.stopClock} variant="fab" mini color="primary">
            <Pause/>
          </StyledButton>):
-         (<StyledButton onClick={this.startClock} variant="fab" mini color="primary" >
+         (<StyledButton onClick={this.props.startClock} variant="fab" mini color="primary" >
            <PlayArrow/>
          </StyledButton>)
        }
